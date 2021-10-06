@@ -1,11 +1,6 @@
-Debug
-Release
-x64
-3-ChibyshevTimofey-A32*
-.vs
-*.txt
-*.config
-**.obj
-\packages
-*.tlog
-*.vcxproj
+**Debug
+**Release
+**x64
+**3-ChibyshevTimofey-A32*
+**.vs
+**.vcxproj
