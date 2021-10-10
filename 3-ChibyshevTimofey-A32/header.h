@@ -1,9 +1,11 @@
 #pragma once
-#ifdef __cplusplus
-extern "C" {
-#endif
-#pragma warning(disable:4996)
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+#pragma warning(disable:4996)
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -19,17 +21,15 @@ extern "C" {
 
     void Destroy(list_t* head);
 
-    int NumberCount(FILE* input);
+    int AddElementEnd(int value, list_t* head);
 
-    void AddElementEnd(int value, list_t* head);
+    void ListPrint(list_t* list, int size);
 
-    void ListPrint(list_t* list);
+    int ReadNumbers(const char* filename, list_t* head, int* len);
 
-    int ReadNumbers(FILE* input, list_t* head, int size);
+    int Merge(list_t* first, list_t* second, list_t* sum, int size1, int size2);
 
-    void Merge(list_t* first, list_t* second, list_t* sum);
-
-    list_t* InserationSort(list_t* head);
+    int Write(list_t* sum, const char* summary, int size);
 
 #ifdef __cplusplus
 }

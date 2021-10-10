@@ -19,25 +19,17 @@ void MemoryLeaks(void)
 
 int main()
 {
-    FILE* input = fopen("Mass.txt", "r");
-    if (input == NULL)
-    {
-        printf("cant open file\n");
-        return 1;
-    }
-    FILE* input1 = fopen("Mass1.txt", "r");
-    if (input1 == NULL)
-    {
-        printf("cant open file\n");
-        return 1;
-    }
-    int size, size1;
-    size = NumberCount(input);
-    size1 = NumberCount(input1);
+    const char *name1 = "Mass.txt";
+    const char *name2 = "Mass1.txt";
+    const char *summary = "Sum.txt";
+    setlocale(LC_CTYPE, "Russian");
+    int size1, size2;
+    size1 = 0;
+    size2 = 0;
     list_t* first = Create();
     list_t* second = Create();
     list_t* sum = Create();
-    if (ReadNumbers(input, first, size))
+    if (ReadNumbers(name1, first, &size1))
     {
         printf("\nThe numbers are read...\n");
     }
@@ -47,11 +39,8 @@ int main()
         return -1;
     }
     printf("\nFirst list: \n");
-    ListPrint(first);
-    first = InserationSort(first);
-    printf("\nSort first list: \n");
-    ListPrint(first);
-    if (ReadNumbers(input1, second, size1))
+    ListPrint(first, size1);
+    if (ReadNumbers(name2, second, &size2))
     {
         printf("\nThe numbers are read...\n");
     }
@@ -61,24 +50,28 @@ int main()
         return -1;
     }
     printf("\nSecond list: \n");
-    ListPrint(second);
-    second = InserationSort(second);
-    printf("\nSort second list: \n");
-    ListPrint(second);
-    Merge(first, second, sum);
+    ListPrint(second, size2);
+    Merge(first, second, sum, size1, size2);
     printf("\nSum list: \n");
-    ListPrint(sum);
+    ListPrint(sum, (size1 + size2));
+    Write(sum, summary, (size1 + size2));
     Destroy(sum);
-    if (first->data < second->data)
+    if ((size1 == 0) || (size2 == 0))
     {
+        free(first);
         free(second);
     }
     else
     {
-        free(first);
+        if (first->data < second->data)
+        {
+            free(second);
+        }
+        else
+        {
+            free(first);
+        }
     }
-    fclose(input);
-    fclose(input1);
     MemoryLeaks();
     return 0;
 }

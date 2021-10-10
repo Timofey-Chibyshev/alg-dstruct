@@ -19,160 +19,106 @@ TEST(TestCaseName, TestName)
 	EXPECT_TRUE(true);
 }
 
-TEST(LIST_TEST, Create)
+TEST(Creation, Create_TEST)
 {
 	list_t* tmp = NULL;
 	tmp = Create();
 	ASSERT_NE(tmp, nullptr);
 	EXPECT_EQ(tmp->next, nullptr);
-	Destroy(tmp);
+	list_t* p = NULL;
+	while (tmp != NULL)
+	{
+		p = tmp;
+		tmp = tmp->next;
+		free(p);
+	}
 }
 
-TEST(NUMS_FILE1, NumberCount)
+TEST(END_ELEM, AddElementEnd_TEST)
 {
-	int counter;
-	FILE* input = fopen("TESTS\\test1.txt", "r");
-	ASSERT_NE(input, nullptr);
-	counter = NumberCount(input);
-	EXPECT_EQ(counter, 5);
-	fclose(input);
-}
-
-TEST(NUMS_FILE2, NumberCount)
-{
-	int counter;
-	FILE* input1 = fopen("TESTS\\test2.txt", "r");
-	ASSERT_NE(input1, nullptr);
-	counter = NumberCount(input1);
-	EXPECT_EQ(counter, 6);
-	fclose(input1);
-}
-
-TEST(NO_NUMS_FILE, NumberCount)
-{
-	int counter;
-	FILE* input2 = fopen("TESTS\\nonumsf.txt", "r");
-	ASSERT_NE(input2, nullptr);
-	counter = NumberCount(input2);
-	EXPECT_EQ(counter, 0);
-	fclose(input2);
-}
-
-TEST(CLEAR_FILE, NumberCount)
-{
-	int counter;
-	FILE* input3 = fopen("TESTS\\clear.txt", "r");
-	ASSERT_NE(input3, nullptr);
-	counter = NumberCount(input3);
-	EXPECT_EQ(counter, 0);
-	fclose(input3);
-}
-
-TEST(END_ELEM, AddElementEnd)
-{
+	int k = 0;
 	list_t* tmp = NULL;
 	tmp = (list_t*)malloc(sizeof(list_t));
 	ASSERT_NE(tmp, nullptr);
 	tmp->data = 0;
 	tmp->next = NULL;
-	AddElementEnd(-1, tmp);
+	k = AddElementEnd(-1, tmp);
 	ASSERT_NE(tmp, nullptr);
 	EXPECT_EQ(tmp->next->data, -1);
 	EXPECT_EQ(tmp->next->next, nullptr);
-	Destroy(tmp);
+	EXPECT_EQ(k, 1);
+	list_t* p = NULL;
+	while (tmp != NULL)
+	{
+		p = tmp;
+		tmp = tmp->next;
+		free(p);
+	}
 }
 
-TEST(READ_FILE1, ReadNumbers)
+TEST(DIFFERET_NUMS, ReadNumbers_TEST)
 {
+	int k = 0;
+	int len = 0;
+	const char* name = "TESTS\\test1.txt";
 	list_t* tmp = NULL;
 	tmp = (list_t*)malloc(sizeof(list_t));
 	ASSERT_NE(tmp, nullptr);
 	tmp->next = NULL;
-	FILE* input = fopen("TESTS\\test1.txt", "r");
-	ASSERT_NE(input, nullptr);
-	int k = ReadNumbers(input, tmp, 5);
+	k = ReadNumbers(name, tmp, &len);
 	EXPECT_EQ(k, 1);
-	EXPECT_EQ(tmp->data, 2);
-	EXPECT_EQ(tmp->next->data, -4224);
-	EXPECT_EQ(tmp->next->next->data, 45);
-	EXPECT_EQ(tmp->next->next->next->data, 68);
-	EXPECT_EQ(tmp->next->next->next->next->data, 3);
+	EXPECT_EQ(len, 4);
+	EXPECT_EQ(tmp->data, -3);
+	EXPECT_EQ(tmp->next->data, -2);
+	EXPECT_EQ(tmp->next->next->data, -1);
+	EXPECT_EQ(tmp->next->next->next->data, 0);
+	EXPECT_EQ(tmp->next->next->next->next->data, 1);
 	EXPECT_EQ(tmp->next->next->next->next->next, nullptr);
-	fclose(input);
-	Destroy(tmp);
+	list_t* p = NULL;
+	while (tmp != NULL)
+	{
+		p = tmp;
+		tmp = tmp->next;
+		free(p);
+	}
 }
 
-TEST(READ_FILE2, ReadNumbers)
+TEST(CLEAR_FILE, ReadNumbers_TEST)
 {
+	int k = 0;
+	int len = 0;
+	const char* name = "TESTS\\clear.txt";
 	list_t* tmp = NULL;
 	tmp = (list_t*)malloc(sizeof(list_t));
 	ASSERT_NE(tmp, nullptr);
 	tmp->next = NULL;
-	FILE* input1 = fopen("TESTS\\test2.txt", "r");
-	ASSERT_NE(input1, nullptr);
-	int k = ReadNumbers(input1, tmp, 6);
+	k = ReadNumbers(name, tmp, &len);
 	EXPECT_EQ(k, 1);
-	EXPECT_EQ(tmp->data, 0);
-	EXPECT_EQ(tmp->next->data, 1);
-	EXPECT_EQ(tmp->next->next->data, 5353);
-	EXPECT_EQ(tmp->next->next->next->data, 433);
-	EXPECT_EQ(tmp->next->next->next->next->data, 234);
-	EXPECT_EQ(tmp->next->next->next->next->next->data, 13);
-	EXPECT_EQ(tmp->next->next->next->next->next->next, nullptr);
-	fclose(input1);
-	Destroy(tmp);
-}
-
-TEST(NO_NUMS_FILE, ReadNumbers)
-{
-	list_t* tmp = NULL;
-	tmp = (list_t*)malloc(sizeof(list_t));
-	ASSERT_NE(tmp, nullptr);
-	tmp->next = NULL;
-	FILE* input2 = fopen("TESTS\\nonumsf.txt", "r");
-	ASSERT_NE(input2, nullptr);
-	int k = ReadNumbers(input2, tmp, 0);
-	EXPECT_EQ(k, 0);
+	EXPECT_EQ(len, 0);
 	EXPECT_EQ(tmp->next, nullptr);
-	fclose(input2);
-	Destroy(tmp);
+	list_t* p = NULL;
+	while (tmp != NULL)
+	{
+		p = tmp;
+		tmp = tmp->next;
+		free(p);
+	}
 }
 
-TEST(CLEAR_FILE, ReadNumbers)
+TEST(DIFFERENT_NUMS, Merge_TEST)
 {
-	list_t* tmp = NULL;
-	tmp = (list_t*)malloc(sizeof(list_t));
-	ASSERT_NE(tmp, nullptr);
-	tmp->next = NULL;
-	FILE* input3 = fopen("TESTS\\clear.txt", "r");
-	ASSERT_NE(input3, nullptr);
-	int k = ReadNumbers(input3, tmp, 0);
-	EXPECT_EQ(k, 0);
-	EXPECT_EQ(tmp->next, nullptr);
-	fclose(input3);
-	Destroy(tmp);
-}
-
-TEST(RES_OF_MERGE, Merge)
-{
+	int k = 0;
 	list_t tmp0[3];
 	ASSERT_NE(tmp0, nullptr);
-	tmp0[0].data = 0;
-	tmp0[0].next = &tmp0[1];
-	tmp0[1].data = 1;
-	tmp0[1].next = &tmp0[2];
-	tmp0[2].data = 9;
-	tmp0[2].next = NULL;
+	tmp0[0] = { 0, &tmp0[1] };
+	tmp0[1] = { 1, &tmp0[2] };
+	tmp0[2] = { 4, NULL };
 	list_t tmp1[4];
 	ASSERT_NE(tmp1, nullptr);
-	tmp1[0].data = 2;
-	tmp1[0].next = &tmp1[1];
-	tmp1[1].data = 3;
-	tmp1[1].next = &tmp1[2];
-	tmp1[2].data = 6;
-	tmp1[2].next = &tmp1[3];
-	tmp1[3].data = 8;
-	tmp1[3].next = NULL;
+	tmp1[0] = { 2, &tmp1[1] };
+	tmp1[1] = { 3, &tmp1[2] };
+	tmp1[2] = { 5, &tmp1[3] };
+	tmp1[3] = { 6, NULL };
 	list_t tmp2[7];
 	ASSERT_NE(tmp2, nullptr);
 	tmp2[0].next = &tmp2[1];
@@ -188,68 +134,118 @@ TEST(RES_OF_MERGE, Merge)
 	t2 = tmp1;
 	list_t* t3 = NULL;
 	t3 = tmp2;
-	Merge(t1, t2, t3);
+	k = Merge(t1, t2, t3, 2, 3);
+	EXPECT_EQ(k, 2);
 	EXPECT_EQ(t3->data, 0);
 	EXPECT_EQ(t3->next->data, 1);
 	EXPECT_EQ(t3->next->next->data, 2);
 	EXPECT_EQ(t3->next->next->next->data, 3);
-	EXPECT_EQ(t3->next->next->next->next->data, 6);
-	EXPECT_EQ(t3->next->next->next->next->next->data, 8);
-	EXPECT_EQ(t3->next->next->next->next->next->next->data, 9);
+	EXPECT_EQ(t3->next->next->next->next->data, 4);
+	EXPECT_EQ(t3->next->next->next->next->next->data, 5);
+	EXPECT_EQ(t3->next->next->next->next->next->next->data, 6);
 	EXPECT_EQ(t3->next->next->next->next->next->next->next, nullptr);
-
 }
 
-TEST(UNSORT_NUMS, InserationSort)
+TEST(CLEAR_TWO_LISTS, Merge_TEST)
 {
-	list_t tmp[5];
-	tmp[0].data = -5;
-	tmp[0].next = &tmp[1];
-	tmp[1].data = 4;
-	tmp[1].next = &tmp[2];
-	tmp[2].data = 2;
-	tmp[2].next = &tmp[3];
-	tmp[3].data = 0;
-	tmp[3].next = &tmp[4];
-	tmp[4].data = 1;
-	tmp[4].next = NULL;
-	list_t* t = NULL;
-	list_t* res = NULL;
-	t = tmp;
-	res = InserationSort(t);
-	ASSERT_NE(res, nullptr);
-	EXPECT_EQ(res->data, -5);
-	EXPECT_EQ(res->next->data, 0);
-	EXPECT_EQ(res->next->next->data, 1);
-	EXPECT_EQ(res->next->next->next->data, 2);
-	EXPECT_EQ(res->next->next->next->next->data, 4);
-	EXPECT_EQ(res->next->next->next->next->next, nullptr);
+	int k = 0;
+	list_t* tmp0 = NULL;
+	list_t* tmp1 = NULL;
+	list_t* tmp2 = NULL;
+	k = Merge(tmp0, tmp1, tmp2, 0, 0);
+	EXPECT_EQ(k, 0);
+	EXPECT_EQ(tmp2, nullptr);
 }
 
-TEST(SORT_NUMS, InserationSort)
+TEST(CLEAR_ONE_LIST, Merge_TEST)
 {
-	list_t tmp[5];
-	tmp[0].data = -5;
-	tmp[0].next = &tmp[1];
-	tmp[1].data = -4;
-	tmp[1].next = &tmp[2];
-	tmp[2].data = -2;
-	tmp[2].next = &tmp[3];
-	tmp[3].data = 0;
-	tmp[3].next = &tmp[4];
-	tmp[4].data = 1;
-	tmp[4].next = NULL;
-	list_t* t = NULL;
-	list_t* res = NULL;
-	t = tmp;
-	res = InserationSort(t);
-	ASSERT_NE(res, nullptr);
-	EXPECT_EQ(res->data, -5);
-	EXPECT_EQ(res->next->data, -4);
-	EXPECT_EQ(res->next->next->data, -2);
-	EXPECT_EQ(res->next->next->next->data, 0);
-	EXPECT_EQ(res->next->next->next->next->data, 1);
-	EXPECT_EQ(res->next->next->next->next->next, nullptr);
+	int k = 0;
+	list_t* t0 = NULL;
+	list_t tmp1[3];
+	ASSERT_NE(tmp1, nullptr);
+	tmp1[0] = { 0, &tmp1[1] };
+	tmp1[1] = { 1, &tmp1[2] };
+	tmp1[2] = { 2, NULL };
+	list_t tmp2[3];
+	ASSERT_NE(tmp2, nullptr);
+	tmp2[0] = { 0, &tmp2[1] };
+	tmp2[1] = { 1, &tmp2[2] };
+	tmp2[2] = { 2, NULL };
+	list_t* t1 = NULL;
+	t1 = tmp1;
+	list_t* sum = NULL;
+	sum = tmp2;
+	k = Merge(t0, t1, sum, 0, 2);
+	EXPECT_EQ(k, 1);
+	EXPECT_EQ(sum->data, 0);
+	EXPECT_EQ(sum->next->data, 1);
+	EXPECT_EQ(sum->next->next->data, 2);
+	EXPECT_EQ(sum->next->next->next, nullptr);
+}
+
+TEST(EQUAL_NUMS, Merge_TEST)
+{
+	int k = 0;
+	list_t tmp0[3];
+	ASSERT_NE(tmp0, nullptr);
+	tmp0[0] = { 0, &tmp0[1] };
+	tmp0[1] = { 1, &tmp0[2] };
+	tmp0[2] = { 3, NULL };
+	list_t tmp1[4];
+	ASSERT_NE(tmp1, nullptr);
+	tmp1[0] = { 0, &tmp1[1] };
+	tmp1[1] = { 2, &tmp1[2] };
+	tmp1[2] = { 3, &tmp1[3] };
+	tmp1[3] = { 4, NULL };
+	list_t tmp2[7];
+	ASSERT_NE(tmp2, nullptr);
+	tmp2[0].next = &tmp2[1];
+	tmp2[1].next = &tmp2[2];
+	tmp2[2].next = &tmp2[3];
+	tmp2[3].next = &tmp2[4];
+	tmp2[4].next = &tmp2[5];
+	tmp2[5].next = &tmp2[6];
+	tmp2[6].next = NULL;
+	list_t* t1 = NULL;
+	t1 = tmp0;
+	list_t* t2 = NULL;
+	t2 = tmp1;
+	list_t* t3 = NULL;
+	t3 = tmp2;
+	k = Merge(t1, t2, t3, 2, 3);
+	EXPECT_EQ(k, 2);
+	EXPECT_EQ(t3->data, 0);
+	EXPECT_EQ(t3->next->data, 0);
+	EXPECT_EQ(t3->next->next->data, 1);
+	EXPECT_EQ(t3->next->next->next->data, 2);
+	EXPECT_EQ(t3->next->next->next->next->data, 3);
+	EXPECT_EQ(t3->next->next->next->next->next->data, 3);
+	EXPECT_EQ(t3->next->next->next->next->next->next->data, 4);
+	EXPECT_EQ(t3->next->next->next->next->next->next->next, nullptr);
+}
+
+TEST(DIFFERENT_NUMS, Write_TEST)
+{
+	const char* name = "TESTS\\forwrite.txt";
+	int k = 0;
+	list_t tmp[3];
+	ASSERT_NE(tmp, nullptr);
+	tmp[0] = { 0, &tmp[1] };
+	tmp[1] = { 1, &tmp[2] };
+	tmp[2] = { 2, NULL };
+	list_t* t1 = NULL;
+	t1 = tmp;
+	k = Write(tmp, name, 2);
+	EXPECT_EQ(k, 2);
+}
+
+TEST(CLEAR_LIST, Write_TEST)
+{
+	const char* name = "TESTS\\forwrite.txt";
+	int k = 0;
+	list_t* t1 = NULL;
+	k = Write(t1, name, 0);
+	EXPECT_EQ(k, 1);
 }
 
 TEST(MEMORY_LEAKS, ALL_FUNCTIONS_MEMORY_LEAKS)

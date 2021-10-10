@@ -27,28 +27,7 @@ void Destroy(list_t* head)
     }
 }
 
-int NumberCount(FILE* input)
-{
-    char let;
-    int value, l, counter;
-    l = 0;
-    counter = 0;
-    fseek(input, 0, SEEK_SET);
-    while (!feof(input))
-    {
-        if (fscanf(input, "%d", &value) == 1)
-        {
-            counter++;
-        }
-        else if (fscanf(input, "%c", &let) == 1)
-        {
-            l++;
-        }
-    }
-    return counter;
-}
-
-void AddElementEnd(int value, list_t* head)
+int AddElementEnd(int value, list_t* head)
 {
     list_t* tmp = NULL;
     list_t* p = NULL;
@@ -57,7 +36,7 @@ void AddElementEnd(int value, list_t* head)
     if (tmp == NULL)
     {
         printf("\nMemory is no allocated!\n");
-        return;
+        return 0;
     }
     tmp->data = value;
     tmp->next = NULL;
@@ -66,10 +45,16 @@ void AddElementEnd(int value, list_t* head)
         p = p->next;
     }
     p->next = tmp;
+    return 1;
 }
 
-void ListPrint(list_t* head)
+void ListPrint(list_t* head, int size)
 {
+    if (size == 0)
+    {
+        printf("clear list\n");
+        return;
+    }
     list_t* p = NULL;
     p = head;
     do
@@ -80,30 +65,56 @@ void ListPrint(list_t* head)
     printf("\n\n");
 }
 
-int ReadNumbers(FILE* input, list_t* head, int size)
+int ReadNumbers(const char* filename, list_t* head, int* len)
 {
-    int value = 0;
-    int l = 0;
-    if (size == 0)
+    FILE* input = fopen(filename, "r");
+    if (input == NULL)
     {
+        printf("cant open file\n");
         return 0;
     }
+    int value = 0;
     fseek(input, 0, SEEK_SET);
     fscanf_s(input, "%d", &head->data);
-    for (int i = 1; i < size; ++i)
+    while(fscanf(input, "%d", &value) == 1)
     {
-        if (fscanf(input, "%d", &value) == 1)
-        {
-            AddElementEnd(value, head);
-        }
+        AddElementEnd(value, head);
+        (*len)++;
     }
+    if (!feof(input))
+    {
+        printf("\nОшибка чтения: достигнут конец файла\n");
+    }
+    else if (ferror(input))
+    {
+        printf("\nОшибка чтения файла\n");
+    }
+    fclose(input);
     return 1;
 }
 
-void Merge(list_t* first, list_t* second, list_t* sum)
+int Merge(list_t* first, list_t* second, list_t* sum, int size1, int size2)
 {
     int i = 0;
-    while (first != 0 && second != 0)
+    if ((size1 == 0) && (size2 == 0))
+    {
+        return 0;
+    }
+    if ((size1 == 0) || (size2 == 0))
+    {
+        if (size1 == 0)
+        {
+            sum->data = second->data;
+            sum->next = second->next;
+        }
+        if (size2 == 0)
+        {
+            sum->data = first->data;
+            sum->next = first->next;
+        }
+        return 1;
+    }
+    while ((first != 0) && (second != 0))
     {
         if (first->data < second->data)
         {
@@ -137,32 +148,31 @@ void Merge(list_t* first, list_t* second, list_t* sum)
         i++;
         sum->next = (first == 0) ? second : first;
     }
+    return 2;
 }
 
-list_t* InserationSort(list_t* head)
+int Write(list_t* sum, const char* filename, int size)
 {
-    list_t* newhead = NULL;
-    list_t* cur = NULL;
-    list_t* buffer = NULL;
-    while (head != NULL)
+    FILE* input = fopen(filename, "w");
+    if (input == NULL)
     {
-        buffer = head;
-        head = head->next;
-        if (newhead == NULL || buffer->data < newhead->data)
-        {
-            buffer->next = newhead;
-            newhead = buffer;
-        }
-        else
-        {
-            cur = newhead;
-            while (cur->next != NULL && !(buffer->data < cur->next->data))
-            {
-                cur = cur->next;
-            }
-            buffer->next = cur->next;
-            cur->next = buffer;
-        }
+        printf("cant open file\n");
+        return 0;
     }
-    return newhead;
+    if (size == 0)
+    {
+        fclose(input);
+        return 1;
+    }
+    else
+    {
+        while (sum->next)
+        {
+            fprintf(input, "%d ", sum->data);
+            sum = sum->next;
+        }
+        fprintf(input, "%d ", sum->data);
+        fclose(input);
+        return 2;
+    }
 }
