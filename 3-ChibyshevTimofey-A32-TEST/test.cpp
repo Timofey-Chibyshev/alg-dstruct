@@ -148,7 +148,25 @@ TEST(DIFFERENT_NUMS, Merge_TEST)
 	EXPECT_EQ(t3->next->next->next->next->next->next->data, 6);
 	EXPECT_EQ(t3->next->next->next->next->next->next->next, nullptr);
 	t3 = t3->next;
-	Destroy(t3);
+	list_t* p = NULL;
+	p = t3;
+	t3 = t3->next;
+	free(p);
+	p = t3;
+	t3 = t3->next;
+	free(p);
+	p = t3;
+	t3 = t3->next;
+	free(p);
+	p = t3;
+	t3 = t3->next;
+	free(p);
+	p = t3;
+	t3 = t3->next;
+	free(p);
+	p = t3;
+	t3 = t3->next;
+	free(p);
 }
 
 TEST(CLEAR_TWO_LISTS, Merge_TEST)
