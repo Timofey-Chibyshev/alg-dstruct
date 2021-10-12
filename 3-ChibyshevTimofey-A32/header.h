@@ -31,6 +31,8 @@ extern "C"
 
     int Write(list_t* sum, const char* summary, int size);
 
+    int AllOperations(const char* name1, const char* name2, const char* sum);
+
 #ifdef __cplusplus
 }
 #endif

@@ -26,12 +26,9 @@ TEST(Creation, Create_TEST)
 	ASSERT_NE(tmp, nullptr);
 	EXPECT_EQ(tmp->next, nullptr);
 	list_t* p = NULL;
-	while (tmp != NULL)
-	{
-		p = tmp;
-		tmp = tmp->next;
-		free(p);
-	}
+	p = tmp;
+	tmp = tmp->next;
+	free(p);
 }
 
 TEST(END_ELEM, AddElementEnd_TEST)
@@ -48,19 +45,19 @@ TEST(END_ELEM, AddElementEnd_TEST)
 	EXPECT_EQ(tmp->next->next, nullptr);
 	EXPECT_EQ(k, 1);
 	list_t* p = NULL;
-	while (tmp != NULL)
-	{
-		p = tmp;
-		tmp = tmp->next;
-		free(p);
-	}
+	p = tmp;
+	tmp = tmp->next;
+	free(p);
+	p = tmp;
+	tmp = tmp->next;
+	free(p);
 }
 
 TEST(DIFFERET_NUMS, ReadNumbers_TEST)
 {
 	int k = 0;
 	int len = 0;
-	const char* name = "TESTS\\test1.txt";
+	const char* name = "TESTS\\diffnums.txt";
 	list_t* tmp = NULL;
 	tmp = (list_t*)malloc(sizeof(list_t));
 	ASSERT_NE(tmp, nullptr);
@@ -75,12 +72,21 @@ TEST(DIFFERET_NUMS, ReadNumbers_TEST)
 	EXPECT_EQ(tmp->next->next->next->next->data, 1);
 	EXPECT_EQ(tmp->next->next->next->next->next, nullptr);
 	list_t* p = NULL;
-	while (tmp != NULL)
-	{
-		p = tmp;
-		tmp = tmp->next;
-		free(p);
-	}
+	p = tmp;
+	tmp = tmp->next;
+	free(p);
+	p = tmp;
+	tmp = tmp->next;
+	free(p);
+	p = tmp;
+	tmp = tmp->next;
+	free(p);
+	p = tmp;
+	tmp = tmp->next;
+	free(p);
+	p = tmp;
+	tmp = tmp->next;
+	free(p);
 }
 
 TEST(CLEAR_FILE, ReadNumbers_TEST)
@@ -97,12 +103,9 @@ TEST(CLEAR_FILE, ReadNumbers_TEST)
 	EXPECT_EQ(len, 0);
 	EXPECT_EQ(tmp->next, nullptr);
 	list_t* p = NULL;
-	while (tmp != NULL)
-	{
-		p = tmp;
-		tmp = tmp->next;
-		free(p);
-	}
+	p = tmp;
+	tmp = tmp->next;
+	free(p);
 }
 
 TEST(DIFFERENT_NUMS, Merge_TEST)
@@ -144,6 +147,8 @@ TEST(DIFFERENT_NUMS, Merge_TEST)
 	EXPECT_EQ(t3->next->next->next->next->next->data, 5);
 	EXPECT_EQ(t3->next->next->next->next->next->next->data, 6);
 	EXPECT_EQ(t3->next->next->next->next->next->next->next, nullptr);
+	t3 = t3->next;
+	Destroy(t3);
 }
 
 TEST(CLEAR_TWO_LISTS, Merge_TEST)
@@ -181,6 +186,8 @@ TEST(CLEAR_ONE_LIST, Merge_TEST)
 	EXPECT_EQ(sum->next->data, 1);
 	EXPECT_EQ(sum->next->next->data, 2);
 	EXPECT_EQ(sum->next->next->next, nullptr);
+	sum = sum->next;
+	Destroy(sum);
 }
 
 TEST(EQUAL_NUMS, Merge_TEST)
@@ -215,19 +222,21 @@ TEST(EQUAL_NUMS, Merge_TEST)
 	k = Merge(t1, t2, t3, 2, 3);
 	EXPECT_EQ(k, 2);
 	EXPECT_EQ(t3->data, 0);
-	EXPECT_EQ(t3->next->data, 0);
-	EXPECT_EQ(t3->next->next->data, 1);
-	EXPECT_EQ(t3->next->next->next->data, 2);
-	EXPECT_EQ(t3->next->next->next->next->data, 3);
-	EXPECT_EQ(t3->next->next->next->next->next->data, 3);
-	EXPECT_EQ(t3->next->next->next->next->next->next->data, 4);
-	EXPECT_EQ(t3->next->next->next->next->next->next->next, nullptr);
+	EXPECT_EQ(t3->next->data, 1);
+	EXPECT_EQ(t3->next->next->data, 2);
+	EXPECT_EQ(t3->next->next->next->data, 3);
+	EXPECT_EQ(t3->next->next->next->next->data, 4);
+	EXPECT_EQ(t3->next->next->next->next->next, nullptr);
+	t3 = t3->next;
+	Destroy(t3);
 }
 
 TEST(DIFFERENT_NUMS, Write_TEST)
 {
 	const char* name = "TESTS\\forwrite.txt";
-	int k = 0;
+	int checkres[3];
+	int k1 = 0;
+	int k2 = 0;
 	list_t tmp[3];
 	ASSERT_NE(tmp, nullptr);
 	tmp[0] = { 0, &tmp[1] };
@@ -235,17 +244,127 @@ TEST(DIFFERENT_NUMS, Write_TEST)
 	tmp[2] = { 2, NULL };
 	list_t* t1 = NULL;
 	t1 = tmp;
-	k = Write(tmp, name, 2);
-	EXPECT_EQ(k, 2);
+	k1 = Write(tmp, name, 2);
+	EXPECT_EQ(k1, 2);
+	FILE* input = fopen(name, "r");
+	ASSERT_NE(input, nullptr);
+	k2 = fscanf(input, "%d %d %d", &checkres[0], &checkres[1], &checkres[2]);
+	EXPECT_EQ(k2, 3);
+	EXPECT_EQ(checkres[0], 0);
+	EXPECT_EQ(checkres[1], 1);
+	EXPECT_EQ(checkres[2], 2);
+	fclose(input);
 }
 
 TEST(CLEAR_LIST, Write_TEST)
 {
 	const char* name = "TESTS\\forwrite.txt";
-	int k = 0;
+	int k1 = 0;
+	int k2 = 0;
+	int checkres[1];
 	list_t* t1 = NULL;
-	k = Write(t1, name, 0);
-	EXPECT_EQ(k, 1);
+	k1 = Write(t1, name, 0);
+	EXPECT_EQ(k1, 1);
+	FILE* input = fopen(name, "r");
+	ASSERT_NE(input, nullptr);
+	k2 = fscanf(input, "%d", &checkres[0]);
+	EXPECT_EQ(k2, -1);
+	fclose(input);
+}
+
+TEST(NOT_EMPTY_FILES_DIFFERENT_NUMS, AllOperations_TEST)
+{
+	int k1, k2;
+	k1 = 0;
+	k2 = 0;
+	int checkres[7];
+	const char* name1 = "TESTS\\test1.txt";
+	const char* name2 = "TESTS\\test2.txt";
+	const char* name3 = "TESTS\\final.txt";
+	k1 = AllOperations(name1, name2, name3);
+	FILE* input = fopen(name3, "r");
+	ASSERT_NE(input, nullptr);
+	k2 = fscanf(input, "%d %d %d %d %d %d %d", &checkres[0], &checkres[1], &checkres[2], &checkres[3], &checkres[4], &checkres[5], &checkres[6]);
+	EXPECT_EQ(k1, 2);
+	EXPECT_EQ(k2, 7);
+	EXPECT_EQ(checkres[0], -3);
+	EXPECT_EQ(checkres[1], -2);
+	EXPECT_EQ(checkres[2], -1);
+	EXPECT_EQ(checkres[3], 0);
+	EXPECT_EQ(checkres[4], 1);
+	EXPECT_EQ(checkres[5], 2);
+	EXPECT_EQ(checkres[6], 3);
+	fclose(input);
+}
+
+TEST(NOT_EMPTY_FILES_EQUAL_NUMS, AllOperations_TEST)
+{
+	int k1, k2;
+	k1 = 0;
+	k2 = 0;
+	int checkres[7];
+	const char* name1 = "TESTS\\diffnums.txt";
+	const char* name2 = "TESTS\\equalnums.txt";
+	const char* name3 = "TESTS\\final.txt";
+	k1 = AllOperations(name1, name2, name3);
+	FILE* input = fopen(name3, "r");
+	ASSERT_NE(input, nullptr);
+	k2 = fscanf(input, "%d %d %d %d %d %d %d", &checkres[0], &checkres[1], &checkres[2], &checkres[3], &checkres[4], &checkres[5], &checkres[6]);
+	EXPECT_EQ(k1, 2);
+	EXPECT_EQ(k2, 7);
+	EXPECT_EQ(checkres[0], -3);
+	EXPECT_EQ(checkres[1], -2);
+	EXPECT_EQ(checkres[2], -1);
+	EXPECT_EQ(checkres[3], 0);
+	EXPECT_EQ(checkres[4], 1);
+	EXPECT_EQ(checkres[5], 2);
+	EXPECT_EQ(checkres[6], 3);
+	fclose(input);
+}
+
+TEST(NOT_EMPTY_AND_EMPTY_FILE, AllOperations_TEST)
+{
+	int k1, k2;
+	k1 = 0;
+	k2 = 0;
+	int checkres[5];
+	const char* name1 = "TESTS\\diffnums.txt";
+	const char* name2 = "TESTS\\clear.txt";
+	const char* name3 = "TESTS\\final.txt";
+	k1 = AllOperations(name1, name2, name3);
+	FILE* input = fopen(name3, "r");
+	ASSERT_NE(input, nullptr);
+	k2 = fscanf(input, "%d %d %d %d %d", &checkres[0], &checkres[1], &checkres[2], &checkres[3], &checkres[4]);
+	EXPECT_EQ(k1, 1);
+	EXPECT_EQ(k2, 5);
+	EXPECT_EQ(checkres[0], -3);
+	EXPECT_EQ(checkres[1], -2);
+	EXPECT_EQ(checkres[2], -1);
+	EXPECT_EQ(checkres[3], 0);
+	EXPECT_EQ(checkres[4], 1);
+	fclose(input);
+}
+
+TEST(EMPTY_AND_NOT_REAL_FILE, AllOperations_TEST)
+{
+	int k1;
+	k1 = 0;
+	const char* name1 = "TESTS\\notreal.txt";
+	const char* name2 = "TESTS\\clear.txt";
+	const char* name3 = "TESTS\\final1.txt";
+	k1 = AllOperations(name1, name2, name3);
+	EXPECT_EQ(k1, -1);
+}
+
+TEST(NOT_REAL_AND_NOT_REAL_FILE, AllOperations_TEST)
+{
+	int k1;
+	k1 = 0;
+	const char* name1 = "TESTS\\notreal1.txt";
+	const char* name2 = "TESTS\\notreal2.txt";
+	const char* name3 = "TESTS\\final1.txt";
+	k1 = AllOperations(name1, name2, name3);
+	EXPECT_EQ(k1, -1);
 }
 
 TEST(MEMORY_LEAKS, ALL_FUNCTIONS_MEMORY_LEAKS)

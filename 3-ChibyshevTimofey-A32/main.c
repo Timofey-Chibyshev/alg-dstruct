@@ -19,59 +19,11 @@ void MemoryLeaks(void)
 
 int main()
 {
+    setlocale(LC_CTYPE, "Russian");
     const char *name1 = "Mass.txt";
     const char *name2 = "Mass1.txt";
     const char *summary = "Sum.txt";
-    setlocale(LC_CTYPE, "Russian");
-    int size1, size2;
-    size1 = 0;
-    size2 = 0;
-    list_t* first = Create();
-    list_t* second = Create();
-    list_t* sum = Create();
-    if (ReadNumbers(name1, first, &size1))
-    {
-        printf("\nThe numbers are read...\n");
-    }
-    else
-    {
-        printf("\nERROR!!!\n");
-        return -1;
-    }
-    printf("\nFirst list: \n");
-    ListPrint(first, size1);
-    if (ReadNumbers(name2, second, &size2))
-    {
-        printf("\nThe numbers are read...\n");
-    }
-    else
-    {
-        printf("\nERROR!!!\n");
-        return -1;
-    }
-    printf("\nSecond list: \n");
-    ListPrint(second, size2);
-    Merge(first, second, sum, size1, size2);
-    printf("\nSum list: \n");
-    ListPrint(sum, (size1 + size2));
-    Write(sum, summary, (size1 + size2));
-    Destroy(sum);
-    if ((size1 == 0) || (size2 == 0))
-    {
-        free(first);
-        free(second);
-    }
-    else
-    {
-        if (first->data < second->data)
-        {
-            free(second);
-        }
-        else
-        {
-            free(first);
-        }
-    }
+    AllOperations(name1, name2, summary);
     MemoryLeaks();
     return 0;
 }
