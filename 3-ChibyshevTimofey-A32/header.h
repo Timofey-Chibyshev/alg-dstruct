@@ -29,7 +29,7 @@ extern "C"
 
     int Merge(list_t* first, list_t* second, list_t* sum, int size1, int size2);
 
-    int Write(list_t* sum, const char* summary, int size);
+    void Write(list_t* sum, const char* summary, int size);
 
     int AllOperations(const char* name1, const char* name2, const char* sum);
 

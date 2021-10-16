@@ -75,16 +75,24 @@ int ReadNumbers(const char* filename, list_t* head, int* len)
     }
     int value = 0;
     fseek(input, 0, SEEK_SET);
-    fscanf_s(input, "%d", &head->data);
     while (fscanf(input, "%d", &value) == 1)
     {
-        if (AddElementEnd(value, head))
+        if ((*len) == 0)
         {
+            head->data = value;
             (*len)++;
         }
         else
         {
-            return 0;
+            if (AddElementEnd(value, head))
+            {
+                (*len)++;
+            }
+            else
+            {
+                fclose(input);
+                return 0;
+            }
         }
     }
     if (!feof(input))
@@ -99,18 +107,18 @@ int ReadNumbers(const char* filename, list_t* head, int* len)
     return 1;
 }
 
-int Write(list_t* sum, const char* filename, int size)
+void Write(list_t* sum, const char* filename, int size)
 {
     FILE* input = fopen(filename, "w");
     if (input == NULL)
     {
         printf("cant open file\n");
-        return 0;
+        return;
     }
     if (size == 0)
     {
         fclose(input);
-        return 1;
+        return;
     }
     else
     {
@@ -121,8 +129,8 @@ int Write(list_t* sum, const char* filename, int size)
         }
         fprintf(input, "%d ", sum->data);
         fclose(input);
-        return 2;
     }
+    return;
 }
 
 int Merge(list_t* first, list_t* second, list_t* sum, int size1, int size2)
@@ -141,7 +149,7 @@ int Merge(list_t* first, list_t* second, list_t* sum, int size1, int size2)
             sum->next = second->next;
             second = second->next;
             sum->next = NULL;
-            while (second != 0)
+            while (second != NULL)
             {
                 if (AddElementEnd(second->data, sum))
                 {
@@ -159,7 +167,7 @@ int Merge(list_t* first, list_t* second, list_t* sum, int size1, int size2)
             sum->next = first->next;
             first = first->next;
             sum->next = NULL;
-            while (first != 0)
+            while (first != NULL)
             {
                 if (AddElementEnd(first->data, sum))
                 {
@@ -199,7 +207,7 @@ int Merge(list_t* first, list_t* second, list_t* sum, int size1, int size2)
         }
     }
     sum->next = NULL;
-    while ((first != 0) && (second != 0))
+    while ((first != NULL) && (second != NULL))
     {
         if (first->data < second->data)
         {
@@ -254,9 +262,9 @@ int Merge(list_t* first, list_t* second, list_t* sum, int size1, int size2)
             }
         }
     }
-    if (first == 0)
+    if (first == NULL)
     {
-        while (second != 0)
+        while (second != NULL)
         {
             if (AddElementEnd(second->data, sum))
             {
@@ -268,9 +276,9 @@ int Merge(list_t* first, list_t* second, list_t* sum, int size1, int size2)
             }
         }
     }
-    if (second == 0)
+    if (second == NULL)
     {
-        while (first != 0)
+        while (first != NULL)
         {
             if (AddElementEnd(first->data, sum))
             {
@@ -301,9 +309,9 @@ int AllOperations(const char* name1, const char* name2, const char* sum)
     else
     {
         printf("\nERROR!!!\n");
-        free(first);
-        free(second);
-        free(third);
+        Destroy(first);
+        Destroy(second);
+        Destroy(third);
         return -1;
     }
     printf("\nFirst list: \n");
@@ -315,21 +323,27 @@ int AllOperations(const char* name1, const char* name2, const char* sum)
     else
     {
         printf("\nERROR!!!\n");
-        free(first);
-        free(second);
-        free(third);
+        Destroy(first);
+        Destroy(second);
+        Destroy(third);
         return -1;
     }
     printf("\nSecond list: \n");
     ListPrint(second, size2);
-    k = Merge(first, second, third, size1, size2);
+    if (Merge(first, second, third, size1, size2) == -1)
+    {
+        Destroy(first);
+        Destroy(second);
+        Destroy(third);
+        return -1;
+    }
     printf("\nSum list: \n");
     ListPrint(third, (size1 + size2));
     Write(third, sum, (size1 + size2));
     Destroy(first);
     Destroy(second);
     Destroy(third);
-    return k;
+    return 1;
 }
 
 
