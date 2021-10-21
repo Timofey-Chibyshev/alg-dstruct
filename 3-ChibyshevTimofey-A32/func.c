@@ -309,12 +309,15 @@ int AllOperations(const char* name1, const char* name2, const char* sum)
     if (second == NULL)
     {
         printf("\nERROR!!!\n");
+        free(first);
         return -1;
     }
     list_t* third = Create();
     if (third == NULL)
     {
         printf("\nERROR!!!\n");
+        free(first);
+        free(second);
         return -1;
     }
     if (ReadNumbers(name1, first, &size1))

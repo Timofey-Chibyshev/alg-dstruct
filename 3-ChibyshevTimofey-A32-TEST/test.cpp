@@ -99,7 +99,7 @@ TEST(DIFFERENT_NUMS, Merge_TEST)
 	tmp1[2] = { 5, &tmp1[3] };
 	tmp1[3] = { 6, NULL };
 	list_t* t3 = NULL;
-    t3 = (list_t*)malloc(sizeof(list_t));
+	t3 = (list_t*)malloc(sizeof(list_t));
 	ASSERT_NE(t3, nullptr);
 	t3->next = NULL;
 	k = Merge(tmp0, tmp1, t3, 3, 4);
