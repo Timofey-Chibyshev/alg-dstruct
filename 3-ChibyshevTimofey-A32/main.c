@@ -1,9 +1,9 @@
 #pragma warning(disable:4996)
 
-#include"header.h"
-#include<stdio.h>
-#include<stdlib.h>
-#include<locale.h>
+#include "header.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
 
 #define _CRT_SECURE_NO_WARNINGS
 #define _CRTDBG_MAP_ALLOC
@@ -27,4 +27,3 @@ int main()
     MemoryLeaks();
     return 0;
 }
-

@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "header.h"
+#include <crtdbg.h>
 
 #define _CRT_SECURE_NO_WARNINGS
 #define _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
 
 
 void MemoryLeaks(void)
