@@ -107,18 +107,18 @@ int ReadNumbers(const char* filename, list_t* head, int* len)
     return 1;
 }
 
-void Write(list_t* sum, const char* filename, int size)
+int Write(list_t* sum, const char* filename, int size)
 {
     FILE* input = fopen(filename, "w");
     if (input == NULL)
     {
         printf("cant open file\n");
-        return;
+        return -1;
     }
     if (size == 0)
     {
         fclose(input);
-        return;
+        return 0;
     }
     else
     {
@@ -130,7 +130,7 @@ void Write(list_t* sum, const char* filename, int size)
         fprintf(input, "%d ", sum->data);
         fclose(input);
     }
-    return;
+    return 1;
 }
 
 int Merge(list_t* first, list_t* second, list_t* sum, int size1, int size2)
@@ -300,8 +300,23 @@ int AllOperations(const char* name1, const char* name2, const char* sum)
     size2 = 0;
     k = 0;
     list_t* first = Create();
+    if (first == NULL)
+    {
+        printf("\nERROR!!!\n");
+        return -1;
+    }
     list_t* second = Create();
+    if (second == NULL)
+    {
+        printf("\nERROR!!!\n");
+        return -1;
+    }
     list_t* third = Create();
+    if (third == NULL)
+    {
+        printf("\nERROR!!!\n");
+        return -1;
+    }
     if (ReadNumbers(name1, first, &size1))
     {
         printf("\nThe numbers are read...\n");
@@ -339,16 +354,25 @@ int AllOperations(const char* name1, const char* name2, const char* sum)
     }
     printf("\nSum list: \n");
     ListPrint(third, (size1 + size2));
-    Write(third, sum, (size1 + size2));
+    k = Write(third, sum, (size1 + size2));
+    if (k == -1)
+    {
+        printf("\nERROR!\n");
+        Destroy(first);
+        Destroy(second);
+        Destroy(third);
+        return -1;
+    }
+    if (k == 0)
+    {
+        printf("\nThere's nothing to write down!\n");
+    }
+    if (k == 1)
+    {
+        printf("\nMerge and write performed successfully!\n");
+    }
     Destroy(first);
     Destroy(second);
     Destroy(third);
     return 1;
 }
-
-
-
-
-
-
-

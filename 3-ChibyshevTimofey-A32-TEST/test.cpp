@@ -25,8 +25,7 @@ TEST(Creation, Create_TEST)
 	tmp = Create();
 	ASSERT_NE(tmp, nullptr);
 	EXPECT_EQ(tmp->next, nullptr);
-	//free(tmp->next);
-	//free(tmp);
+	free(tmp);
 }
 
 TEST(END_ELEM, AddElementEnd_TEST)
@@ -207,17 +206,19 @@ TEST(DIFFERENT_NUMS, Write_TEST)
 {
 	const char* name = "TESTS\\forwrite.txt";
 	int checkres[4];
+	int k1 = 0;
 	int k2 = 0;
 	int k3 = 0;
 	list_t tmp[3];
 	tmp[0] = { 0, &tmp[1] };
 	tmp[1] = { 1, &tmp[2] };
 	tmp[2] = { 2, NULL };
-	Write(tmp, name, 2);
+	k1 = Write(tmp, name, 2);
 	FILE* input = fopen(name, "r");
 	ASSERT_NE(input, nullptr);
 	k2 = fscanf(input, "%d %d %d", &checkres[0], &checkres[1], &checkres[2]);
 	k3 = fscanf(input, "%d", &checkres[3]);
+	EXPECT_EQ(k1, 1);
 	EXPECT_EQ(k2, 3);
 	EXPECT_EQ(k3, -1);
 	EXPECT_EQ(checkres[0], 0);
@@ -229,16 +230,19 @@ TEST(DIFFERENT_NUMS, Write_TEST)
 TEST(CLEAR_LIST, Write_TEST)
 {
 	const char* name = "TESTS\\forwrite.txt";
-	int k2 = 0;
+	int k1, k2;
+	k1 = 0;
+	k2 = 0;
 	int checkres[1];
 	list_t* t1 = NULL;
 	t1 = (list_t*)malloc(sizeof(list_t));
 	ASSERT_NE(t1, nullptr);
 	t1->next = NULL;
-	Write(t1, name, 0);
+	k1 = Write(t1, name, 0);
 	FILE* input = fopen(name, "r");
 	ASSERT_NE(input, nullptr);
 	k2 = fscanf(input, "%d", &checkres[0]);
+	EXPECT_EQ(k1, 0);
 	EXPECT_EQ(k2, -1);
 	fclose(input);
 	free(t1);
