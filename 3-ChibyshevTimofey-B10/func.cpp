@@ -113,11 +113,11 @@ void* memalloc(int size)
     return (void*)((char*)firstCorrect + sizeof(int) + sizeof(void*));
 }
 
-bool MergeWithNext(void* currentBlock, void* nextBlock, bool merged_with_left)   //This function is created to make it easier to understand "free" function
+bool MergeWithNext(void* currentBlock, void* nextBlock, bool mergedWithPrev)   //This function is created to make it easier to understand "free" function
 {
     if ((((char*)nextBlock < (char*)memStart + allSize)) && ((*SizeStart(nextBlock) > 0)))
     {
-        if (!merged_with_left)
+        if (!mergedWithPrev)
         {
             *PointerToEmptyBlocks(currentBlock) = emptyBlocksHead;
             emptyBlocksHead = currentBlock;

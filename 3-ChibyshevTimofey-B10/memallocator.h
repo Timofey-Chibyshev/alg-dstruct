@@ -50,7 +50,7 @@ void** PointerToEmptyBlocks(void* descriptor);
 
 int* SizeEnd(void* descriptor);
 
-bool MergeWithNext(void* currentBlock, void* nextBlock, bool merged_with_left);
+bool MergeWithNext(void* currentBlock, void* nextBlock, bool mergedWithPrev);
 
 #ifdef __cplusplus
 }
