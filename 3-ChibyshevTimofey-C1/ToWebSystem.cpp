@@ -58,6 +58,10 @@ AdjList* AdjListReadFromStream(FILE* stream)
         return NULL;
     }
     AdjList* graph = AdjListCreate(verticesCount);
+    if (!graph)
+    {
+        return NULL;
+    }
     if (fscanf(stream, "%c", &ch) != 1)
     {
         perror("ERROR!");
