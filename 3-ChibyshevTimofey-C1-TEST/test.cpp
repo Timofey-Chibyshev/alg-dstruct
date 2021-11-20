@@ -61,7 +61,7 @@ TEST(AllOperations_StressTest, AllOperationsDFSResult)
         printf("ERROR");
         ASSERT_TRUE(fp);
     }
-    AdjList* graph = AdjListReadFromStream(fp);
+    AdjList_t* graph = AdjListReadFromStream(fp);
     fclose(fp);
     if (!graph) 
     {

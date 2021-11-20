@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include "Header.h"
 
-AdjList* AdjListReadFromStream(FILE* stream)
+AdjList_t* AdjListReadFromStream(FILE* stream)
 {
     int verticesCount = 0, numOfVertex = 0, currentVertex = 0, currentNeighbour = 0;
     char ch;
@@ -16,7 +16,7 @@ AdjList* AdjListReadFromStream(FILE* stream)
         perror("ERROR!");
         return NULL;
     }
-    AdjList* graph = AdjListCreate(verticesCount);
+    AdjList_t* graph = AdjListCreate(verticesCount);
     if (!graph)
     {
         return NULL;
@@ -72,17 +72,17 @@ AdjList* AdjListReadFromStream(FILE* stream)
     return graph;
 }
 
-AdjList* AdjListCreate(int verticesCount)
+AdjList_t* AdjListCreate(int verticesCount)
 {
     int numOfVertex = 0;
-    AdjList* graph = NULL;
-    graph = (AdjList*)malloc(sizeof(AdjList));
+    AdjList_t* graph = NULL;
+    graph = (AdjList_t*)malloc(sizeof(AdjList_t));
     if (!graph)
     {
         return NULL;
     }
     graph->verticesCount = verticesCount;
-    graph->verticesOfLine = (LineOfList*)malloc(verticesCount * sizeof(LineOfList));
+    graph->verticesOfLine = (LineOfList_t*)malloc(verticesCount * sizeof(LineOfList_t));
     if (!graph->verticesOfLine)
     {
         free(graph);
@@ -96,7 +96,7 @@ AdjList* AdjListCreate(int verticesCount)
     return graph;
 }
 
-void AdjListDestroy(AdjList* graph)
+void AdjListDestroy(AdjList_t* graph)
 {
     int numOfVertex = 0;
     for (numOfVertex = 0; numOfVertex < graph->verticesCount; numOfVertex++)
@@ -110,7 +110,7 @@ void AdjListDestroy(AdjList* graph)
     free(graph);
 }
 
-bool AddingVertexToGraph(AdjList* graph, int position, int neighbour)
+bool AddingVertexToGraph(AdjList_t* graph, int position, int neighbour)
 {
     int counter;
     graph->verticesOfLine[position].neighboursCount++;
@@ -127,12 +127,12 @@ bool AddingVertexToGraph(AdjList* graph, int position, int neighbour)
     return true;
 }
 
-bool DFS(FILE* stream, AdjList* graph, int vertex) 
+bool DFS(FILE* stream, AdjList_t* graph, int vertex)
 {
     int* visited = NULL;
     int currentVertex = 0;
     int numOfVertex = 0;
-    Stack* stack = StackInit();
+    Stack_t* stack = StackInit();
     if (!stack)
     {
         return false;
@@ -177,7 +177,7 @@ bool DFS(FILE* stream, AdjList* graph, int vertex)
 
 int AllOperations()
 {
-    AdjList* graph = AdjListReadFromStream(stdin);
+    AdjList_t* graph = AdjListReadFromStream(stdin);
     if (!graph)
     {
         return -1;
@@ -191,9 +191,9 @@ int AllOperations()
     return 0;
 }
 
-Stack* StackInit()
+Stack_t* StackInit()
 {
-    Stack* stack = (Stack*)malloc(sizeof(Stack));
+    Stack_t* stack = (Stack_t*)malloc(sizeof(Stack_t));
     if (!stack)
     {
         return NULL;
@@ -202,9 +202,9 @@ Stack* StackInit()
     return stack;
 }
 
-Stack* StackPush(Stack* stack, int vertex)
+Stack_t* StackPush(Stack_t* stack, int vertex)
 {
-    node_t* tmp = (node_t*)malloc(sizeof(node_t));
+    Node_t* tmp = (Node_t*)malloc(sizeof(Node_t));
     if (!tmp)
     {
         return NULL;
@@ -215,9 +215,9 @@ Stack* StackPush(Stack* stack, int vertex)
     return stack;
 }
 
-int StackPop(Stack* stack)
+int StackPop(Stack_t* stack)
 {
-    node_t* tmp = stack->top;
+    Node_t* tmp = stack->top;
     int vertex;
     if (!StackIsEmpty(stack))
     {
@@ -230,15 +230,15 @@ int StackPop(Stack* stack)
     return -1;
 }
 
-bool StackIsEmpty(Stack* stack)
+bool StackIsEmpty(Stack_t* stack)
 {
     return (!stack->top);
 }
 
-void StackDestroy(Stack* stack)
+void StackDestroy(Stack_t* stack)
 {
-    node_t* iter = stack->top;
-    node_t* tmp = iter;
+    Node_t* iter = stack->top;
+    Node_t* tmp = iter;
     while (iter)
     {
         tmp = iter;
@@ -248,7 +248,7 @@ void StackDestroy(Stack* stack)
     free(stack);
 }
 
-bool StackPushAllVertexNeighbours(Stack* stack, AdjList* graph, int vertex)
+bool StackPushAllVertexNeighbours(Stack_t* stack, AdjList_t* graph, int vertex)
 {
     int i = graph->verticesOfLine[vertex].neighboursCount - 1;
     int neighbour = graph->verticesOfLine[vertex].neighbours[i];

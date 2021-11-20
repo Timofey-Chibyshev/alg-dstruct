@@ -13,39 +13,38 @@ extern "C" {
     {
         int* neighbours;
         int neighboursCount;
-    } LineOfList;
+    } LineOfList_t;
 
     typedef struct
     {
-        LineOfList* verticesOfLine;
+        LineOfList_t* verticesOfLine;
         int verticesCount;
-    } AdjList;
+    } AdjList_t;
 
-    typedef struct node_t
+    typedef struct Node_t
     {
         int vertex;
-        struct node_t* next;
-    } node_t;
+        struct Node_t* next;
+    } Node_t;
 
     typedef struct
     {
-        node_t* top;
-    } Stack;
+        Node_t* top;
+    } Stack_t;
 
-    int IntLength(int num);
-    AdjList* AdjListReadFromStream(FILE* stream);
-    AdjList* AdjListCreate(int verticesCount);
-    void AdjListDestroy(AdjList* graph);
-    bool DFS(FILE* stream, AdjList* graph, int vertex);
+    AdjList_t* AdjListReadFromStream(FILE* stream);
+    AdjList_t* AdjListCreate(int verticesCount);
+    void AdjListDestroy(AdjList_t* graph);
+    bool DFS(FILE* stream, AdjList_t* graph, int vertex);
     int AllOperations();
-    bool AddingVertexToGraph(AdjList* graph, int position, int neighbour);
+    bool AddingVertexToGraph(AdjList_t* graph, int position, int neighbour);
 
-    Stack* StackInit();
-    Stack* StackPush(Stack* stack, int vertex);
-    int StackPop(Stack* stack);
-    bool StackIsEmpty(Stack* stack);
-    void StackDestroy(Stack* stack);
-    bool StackPushAllVertexNeighbours(Stack* stack, AdjList* graph, int vertex);
+    Stack_t* StackInit();
+    Stack_t* StackPush(Stack_t* stack, int vertex);
+    int StackPop(Stack_t* stack);
+    bool StackIsEmpty(Stack_t* stack);
+    void StackDestroy(Stack_t* stack);
+    bool StackPushAllVertexNeighbours(Stack_t* stack, AdjList_t* graph, int vertex);
 
 #ifdef __cplusplus
 }
