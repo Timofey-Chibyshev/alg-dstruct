@@ -159,7 +159,6 @@ bool AddingVertexToGraph(AdjList_t* graph, int position, int neighbour)
     tmp = (int*)realloc(graph->verticesOfLine[position].neighbours, graph->verticesOfLine[position].neighboursCount * sizeof(int));
     if (!tmp)
     {
-        AdjListDestroy(graph);
         return false;
     }
     graph->verticesOfLine[position].neighbours = tmp;
