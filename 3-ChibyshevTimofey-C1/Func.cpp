@@ -242,7 +242,7 @@ void StackDestroy(Stack_t* stack)
     {
         tmp = iter;
         iter = iter->next;
-        free(iter);
+        free(tmp);
     }
     free(stack);
 }
