@@ -1,10 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
-#include <stdbool.h>
-#include <stdlib.h>
 #include "Header.h"
 
 AdjList_t* AdjListReadFromStream(FILE* stream)

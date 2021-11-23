@@ -1,3 +1,4 @@
+#pragma once
 #ifndef __HEADER_H_
 #define __HEADER_H_
 
@@ -7,6 +8,9 @@ extern "C" {
 #pragma warning(disable:4996)
 
 #include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
     typedef struct
@@ -49,5 +53,4 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-
 #endif
