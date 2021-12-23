@@ -89,6 +89,11 @@ int** CreateBoard(int n)
 	for (i = 0; i < n; i++)
 	{
 		board[i] = (int*)malloc(n * sizeof(int));
+		if (board[i] == NULL)
+		{
+			printf("\nERROR\n");
+			return NULL;
+		}
 	}
 	for (i = 0; i < n; i++)
 	{
@@ -163,17 +168,24 @@ int LabSolution(const char* inputName, const char* outputName)
 	if (!result)
 	{
 		printf("\nERROR\n");
+		DeleteBoard(board, n);
 		return 0;
 	}
 	if (TryQueen(0, n, board, result))
 	{
 		if (!Writing(result, n, outputName))
 		{
+			printf("\nERROR\n");
+			DeleteBoard(board, n);
+			free(result);
 			return 0;
 		}
 	}
 	else
 	{
+		printf("\nERROR\n");
+		DeleteBoard(board, n);
+		free(result);
 		return 0;
 	}
 	DeleteBoard(board, n);

@@ -66,3 +66,19 @@ TEST(N3Test, FunctionalTest2)
     int k = LabSolution(filename1, filename2);
     EXPECT_EQ(k, 0);
 }
+
+TEST(N2Test, FunctionalTest3)
+{
+    const char* filename1 = "N2Input.txt";
+    const char* filename2 = "N2Output.txt";
+    int k = LabSolution(filename1, filename2);
+    EXPECT_EQ(k, 0);
+}
+
+TEST(N8Test, FunctionalTest4)
+{
+    const char* filename1 = "N8Input.txt";
+    const char* filename2 = "N8Output.txt";
+    int k = LabSolution(filename1, filename2);
+    EXPECT_EQ(k, 0);
+}
