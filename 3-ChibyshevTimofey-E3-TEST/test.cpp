@@ -5,6 +5,16 @@
 #include <stdbool.h>
 #include "header.h"
 
+#define _CRT_SECURE_NO_WARNINGS
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+
+void MemoryLeaks(void)
+{
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE);
+    _CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDOUT);
+}
 
 TEST(TestCaseName, TestName) 
 {
@@ -51,7 +61,7 @@ TEST(FillTreeTest, OneLevelTree) {
     EXPECT_EQ(t[2].height, 0);
 }
 
-TEST(FillTreeFuncTest, OneWayTree) {
+TEST(FillTreeTest, OneWayTree) {
     /*
              1      3
            /   \   /
@@ -81,7 +91,7 @@ TEST(FillTreeFuncTest, OneWayTree) {
     EXPECT_EQ(t[3].height, 0);
 }
 
-TEST(FillTreeFuncTest, NearlyOneWayTree) {
+TEST(FillTreeTest, NearlyOneWayTree) {
     /*
         0
        /
@@ -125,7 +135,7 @@ TEST(FillTreeFuncTest, NearlyOneWayTree) {
     EXPECT_EQ(t[5].height, 0);
 }
 
-TEST(FillTreeFuncTest, FullTree) {
+TEST(FillTreeTest, FullTree) {
 /*
                   2
                 /  
@@ -344,7 +354,7 @@ TEST(PrintTreeTest, NearlyOneWayTree)
     fclose(fp);
 }
 
-TEST(PrintTreeFuncTest, FullTree) {
+TEST(PrintTreeTest, FullTree) {
     /*
                       2
                     /
@@ -408,3 +418,8 @@ TEST(PrintTreeFuncTest, FullTree) {
     fclose(fp);
 }
 
+int main()
+{
+    MemoryLeaks();
+    return 0;
+}
