@@ -5,17 +5,6 @@
 #include <stdbool.h>
 #include "header.h"
 
-#define _CRT_SECURE_NO_WARNINGS
-#define _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
-
-void MemoryLeaks(void)
-{
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-    _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE);
-    _CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDOUT);
-}
-
 TEST(TestCaseName, TestName) 
 {
   EXPECT_EQ(1, 1);
@@ -416,10 +405,4 @@ TEST(PrintTreeTest, FullTree) {
     EXPECT_EQ(memcmp(fromFile, correctAnswer, 8), 0);
 
     fclose(fp);
-}
-
-int main()
-{
-    MemoryLeaks();
-    return 0;
 }

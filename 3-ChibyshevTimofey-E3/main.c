@@ -1,5 +1,3 @@
-#pragma warning(disable:4996)
-
 #include <stdio.h>
 #include "header.h"
 
@@ -41,7 +39,7 @@ int main()
     t[5].right = &t[8];
     t[6].right = &t[9];
     FillTree(t);
-    printf("Tree:\n");
+    printf("tree:\n");
     PrintTree(fp, t, 0);
     fclose(fp);
 	return 0;
