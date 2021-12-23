@@ -81,7 +81,7 @@ int** CreateBoard(int n)
 {
 	int i, j;
 	int** board = (int**)malloc(n * sizeof(int*));
-	if (board == NULL)
+	if (!board)
 	{
 		printf("\nERROR\n");
 		return NULL;
@@ -89,7 +89,7 @@ int** CreateBoard(int n)
 	for (i = 0; i < n; i++)
 	{
 		board[i] = (int*)malloc(n * sizeof(int));
-		if (board[i] == NULL)
+		if (!board[i])
 		{
 			printf("\nERROR\n");
 			return NULL;
@@ -119,7 +119,7 @@ int Reading(const char* inputName)
 {
 	int size;
 	FILE* fp = fopen(inputName, "r");
-	if (fp == NULL)
+	if (!fp)
 	{
 		printf("cant open fileread\n");
 		return 0;
@@ -137,7 +137,7 @@ int Writing(int* resultQueens, int n, const char* outputName)
 {
 	int i;
 	FILE* fp = fopen(outputName, "w");
-	if (fp == NULL)
+	if (!fp)
 	{
 		printf("cant open filewrite\n");
 		return 0;
