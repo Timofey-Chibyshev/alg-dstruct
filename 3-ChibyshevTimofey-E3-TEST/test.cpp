@@ -5,13 +5,15 @@
 #include <stdbool.h>
 #include "header.h"
 
-TEST(TestCaseName, TestName) 
+#define maxSize 32
+
+TEST(TestCaseName, TestName)
 {
-  EXPECT_EQ(1, 1);
-  EXPECT_TRUE(true);
+    EXPECT_EQ(1, 1);
+    EXPECT_TRUE(true);
 }
 
-TEST(FillTreeTest, OneNodeTree) 
+TEST(FillTreeTest, OneNodeTree)
 {
     /*
         0
@@ -19,7 +21,7 @@ TEST(FillTreeTest, OneNodeTree)
 
     tree t = { 999, nullptr };
     FillTree(&t);
-    EXPECT_EQ(t.height, 0); 
+    EXPECT_EQ(t.height, 0);
 }
 
 TEST(FillTreeTest, OneLevelTree) {
@@ -82,19 +84,17 @@ TEST(FillTreeTest, OneWayTree) {
 
 TEST(FillTreeTest, NearlyOneWayTree) {
     /*
-        0
-       /
-      1
-       \
-        2
-       / \
-      5   3
-         /
-        4
+       0
+         \              3
+          \           /   \4
+           \        2
+            \     /   \
+             \   /      5
+               1
     */
 
     tree t[6] = { 0 };
-  
+
     t[0].height = 999;
     t[0].left = &t[1];
     t[0].right = nullptr;
@@ -107,8 +107,8 @@ TEST(FillTreeTest, NearlyOneWayTree) {
     t[3].height = 999;
     t[3].left = &t[4];
     t[3].right = nullptr;
-    t[4].height = 999; 
-    t[4].left = nullptr; 
+    t[4].height = 999;
+    t[4].left = nullptr;
     t[4].right = nullptr;
     t[5].height = 999;
     t[5].left = nullptr;
@@ -116,27 +116,27 @@ TEST(FillTreeTest, NearlyOneWayTree) {
 
     FillTree(t);
 
-    EXPECT_EQ(t[0].height, 3); 
-    EXPECT_EQ(t[1].height, 2); 
-    EXPECT_EQ(t[2].height, 1); 
+    EXPECT_EQ(t[0].height, 3);
+    EXPECT_EQ(t[1].height, 2);
+    EXPECT_EQ(t[2].height, 1);
     EXPECT_EQ(t[3].height, 1);
     EXPECT_EQ(t[4].height, 0);
     EXPECT_EQ(t[5].height, 0);
 }
 
 TEST(FillTreeTest, FullTree) {
-/*
-                  2
-                /  
-               /
-              0         /7
-               \      4 
-                \   / 
-                  1 
-                    \  /6
-                      3
-                       \5
- */  
+    /*
+                      2
+                    /
+                   /
+                  0         /7
+                   \      4
+                    \   /
+                      1
+                        \  /6
+                          3
+                           \5
+     */
 
     tree t[8] = { 0 };
 
@@ -177,12 +177,49 @@ TEST(FillTreeTest, FullTree) {
     EXPECT_EQ(t[7].height, 0);
 }
 
-void PrintTreeFuncTest(tree* t, const char* filenameOut) 
+bool ReadingAndCompairing(int* correctAnswer, const char* filenameOut, int correctSize)
+{
+    FILE* fp = fopen(filenameOut, "r");
+    if (!fp)
+    {
+        return false;
+    }
+    int fromFile[maxSize];
+    int i = 0;
+    while (fscanf(fp, "%d", &fromFile[i]) == 1)
+    {
+
+        i++;
+        if (i > correctSize)
+        {
+            fclose(fp);
+            return false;
+        }
+    }
+    if (i != correctSize)
+    {
+        fclose(fp);
+        return false;
+    }
+    fclose(fp);
+    int resOfCompairing = memcmp(fromFile, correctAnswer, correctSize * sizeof(int));
+    if (resOfCompairing == 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void PrintTreeFuncTest(tree* t, int* correctAnswer, const char* filenameOut, int correctSize)
 {
     FILE* fp = fopen(filenameOut, "w");
     ASSERT_NE(fp, nullptr);
     PrintTree(fp, t, 0);
     fclose(fp);
+    ASSERT_TRUE(ReadingAndCompairing(correctAnswer, filenameOut, correctSize));
 }
 
 TEST(PrintTreeTest, OneNodeTree)
@@ -193,28 +230,22 @@ TEST(PrintTreeTest, OneNodeTree)
     tree t = { 0, nullptr };
 
     int correctAnswer = 0;
-    int fromFile;
+    int correctSize = 1;
     const char* filename = "oneVertex.txt";
-    
-    PrintTreeFuncTest(&t, filename);
-    
-    FILE* fp = fopen(filename, "r");
-    ASSERT_NE(fp, nullptr);
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile));
-    
-    EXPECT_EQ(fromFile, correctAnswer);
+
+    PrintTreeFuncTest(&t, &correctAnswer, filename, correctSize);
 }
 
 TEST(PrintTreeTest, OneLevelTree)
 {
-    /*  
+    /*
                2
              /
            0
              \
                1
     */
-   
+
     tree t[3] = { 0 };
 
     t[0].height = 1;
@@ -228,27 +259,16 @@ TEST(PrintTreeTest, OneLevelTree)
     t[2].right = nullptr;
 
     int correctAnswer[3] = { 0, 1, 0 };
-    int fromFile[3];
+    int correctSize = 3;
     const char* filename = "oneLevel.txt";
 
-    PrintTreeFuncTest(&t[0], filename);
-
-    FILE* fp = fopen(filename, "r");
-    ASSERT_NE(fp, nullptr);
-
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[0]));
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[1]));
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[2]));
-    
-    EXPECT_EQ(memcmp(fromFile, correctAnswer, 3), 0);
-    
-    fclose(fp);
+    PrintTreeFuncTest(t, correctAnswer, filename, correctSize);
 }
 
-TEST(PrintTreeTest, OneWayTree) 
+TEST(PrintTreeTest, OneWayTree)
 {
     /*
-             1      
+             1
            /   \   / 3
           /      2
         0
@@ -270,35 +290,23 @@ TEST(PrintTreeTest, OneWayTree)
     t[3].right = nullptr;
 
     int correctAnswer[4] = { 2, 0, 1, 3 };
-    int fromFile[4];
+    int correctSize = 4;
     const char* filename = "oneWay.txt";
 
-    PrintTreeFuncTest(&t[0], filename);
-
-    FILE* fp = fopen(filename, "r");
-    ASSERT_NE(fp, nullptr);
-
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[0]));
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[1]));
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[2]));
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[3]));
-
-    EXPECT_EQ(memcmp(fromFile, correctAnswer, 4), 0);
-
-    fclose(fp);
+    PrintTreeFuncTest(t, correctAnswer, filename, correctSize);
 }
 
-TEST(PrintTreeTest, NearlyOneWayTree) 
+TEST(PrintTreeTest, NearlyOneWayTree)
 {
     /*
-                         
-            0  
+
+            0
              \             3
               \          /   \4
                \       2
                 \    /   \
-                 \  /      5 
-                  1     
+                 \  /      5
+                  1
     */
 
     tree t[6] = { 0 };
@@ -323,24 +331,10 @@ TEST(PrintTreeTest, NearlyOneWayTree)
     t[5].right = nullptr;
 
     int correctAnswer[6] = { 3, 1, 0, 1, 0, 2 };
-    int fromFile[6];
+    int correctSize = 6;
     const char* filename = "nearlyOneWay.txt";
 
-    PrintTreeFuncTest(&t[0], filename);
-
-    FILE* fp = fopen(filename, "r");
-    ASSERT_NE(fp, nullptr);
-
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[0]));
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[1]));
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[2]));
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[3]));
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[4]));
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[5]));
-
-    EXPECT_EQ(memcmp(fromFile, correctAnswer, 6), 0);
-
-    fclose(fp);
+    PrintTreeFuncTest(t, correctAnswer, filename, correctSize);
 }
 
 TEST(PrintTreeTest, FullTree) {
@@ -385,24 +379,8 @@ TEST(PrintTreeTest, FullTree) {
     t[7].right = nullptr;
 
     int correctAnswer[8] = { 0, 1, 0, 1, 2, 0, 1, 0 };
-    int fromFile[8];
+    int correctSize = 8;
     const char* filename = "fullWay.txt";
 
-    PrintTreeFuncTest(&t[0], filename);
-
-    FILE* fp = fopen(filename, "r");
-    ASSERT_NE(fp, nullptr);
-
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[0]));
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[1]));
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[2]));
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[3]));
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[4]));
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[5]));
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[6]));
-    ASSERT_TRUE(fscanf(fp, "%d", &fromFile[7]));
-
-    EXPECT_EQ(memcmp(fromFile, correctAnswer, 8), 0);
-
-    fclose(fp);
+    PrintTreeFuncTest(t, correctAnswer, filename, correctSize);
 }
