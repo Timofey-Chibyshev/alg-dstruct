@@ -1,6 +1,6 @@
 #include "RBTree.h"
 
-Node forLeaves = { NIL, NIL, 0, BLACK, 0 };
+Node forLeaves = { NIL, NIL, NULL, BLACK, 0 };
 
 void RotateLeft(Node* x, Node** root)
 {
@@ -75,7 +75,7 @@ Node* InsertNode(int data, Node** root)
     Node* current, * parent, * x;
     current = *root;
     parent = NULL;
-    if (current == NULL)
+    if (!current)
     {
         return NULL;
     }
@@ -89,7 +89,7 @@ Node* InsertNode(int data, Node** root)
         current = (data < current->data) ? current->left : current->right;
     }
     x = (Node*)malloc(sizeof(Node));
-    if (x == NULL)
+    if (!x)
     {
         return ERROR_ALLOC;
     }
@@ -179,7 +179,7 @@ Node* FindNode(int data, Node* root)
     {
         if (data == current->data)
         {
-            return (current);
+            return current;
         }
         else
         {
@@ -332,7 +332,7 @@ void ReadingData(Node* tree)
         }
         if (command == 'f') {
             checkNode = FindNode(key, tree);
-            if (checkNode != NULL)
+            if (checkNode)
             {
                 if (checkNode->data == key)
                 {
