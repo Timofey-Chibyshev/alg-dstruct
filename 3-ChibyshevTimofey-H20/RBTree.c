@@ -314,39 +314,3 @@ void DeleteFixup(Node* x, Node** root)
     }
     x->color = BLACK;
 }
-
-void ReadingData(Node* tree)
-{
-    char command;
-    int key;
-    Node* checkNode;
-    while (fscanf(stdin, "%c %d", &command, &key) > 0)
-    {
-        if (command == 'a')
-        {
-            InsertNode(key, &tree);
-        }
-        if (command == 'r')
-        {
-            DeleteNode(key, &tree);
-        }
-        if (command == 'f') {
-            checkNode = FindNode(key, tree);
-            if (checkNode)
-            {
-                if (checkNode->data == key)
-                {
-                    printf("yes\n");
-                }
-                else
-                {
-                    printf("no\n");
-                }
-            }
-            else
-            {
-                printf("no\n");
-            }
-        }
-    }
-}

@@ -42,8 +42,6 @@ extern "C" {
 
     void DeleteFixup(Node* x, Node** root);
 
-    void ReadingData(Node* tree);
-
 #ifdef __cplusplus
 }
 #endif
