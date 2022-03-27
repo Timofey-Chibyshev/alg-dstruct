@@ -8,6 +8,7 @@ extern "C" {
 #pragma warning(disable:4996)
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #define ERROR_ALLOC NULL
 #define NIL &forLeaves 
@@ -41,6 +42,8 @@ extern "C" {
     void DeleteNode(int data, Node** root);
 
     void DeleteFixup(Node* x, Node** root);
+
+    void TreeDestroy(Node* x);
 
 #ifdef __cplusplus
 }

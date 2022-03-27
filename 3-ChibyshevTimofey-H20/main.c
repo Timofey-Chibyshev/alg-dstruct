@@ -1,13 +1,36 @@
 #include "RBTree.h"
+#include <crtdbg.h>
 
-int main(void)
+#define _CRT_SECURE_NO_WARNINGS
+#define _CRTDBG_MAP_ALLOC
+#define BUF_SIZE 16
+
+void MemoryLeaks(void)
+{
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE);
+    _CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDOUT);
+}
+
+int StartProcess()
 {
     Node* tree = NIL;
     Node* checkNode;
-    char command;
+    char command, space;
+    char buf[BUF_SIZE] = { 0 };
     int key;
-    while (fscanf(stdin, "%c %d", &command, &key) > 0)
+    while(fgets(buf, BUF_SIZE, stdin))
     {
+        if (sscanf(buf, "%c%c%d", &command, &space, &key) <= 0)
+        {
+            TreeDestroy(tree);
+            return 1;
+        }
+        if (!(((command == 'a') || (command == 'r') || (command == 'f')) && (space == ' ')))
+        {
+            TreeDestroy(tree);
+            return 1;
+        }
         if (command == 'a')
         {
             InsertNode(key, &tree);
@@ -16,7 +39,8 @@ int main(void)
         {
             DeleteNode(key, &tree);
         }
-        if (command == 'f') {
+        if (command == 'f') 
+        {
             checkNode = FindNode(key, tree);
             if (checkNode)
             {
@@ -35,6 +59,17 @@ int main(void)
             }
         }
     }
-    free(tree);
+    TreeDestroy(tree);
+    return 0;
+}
+
+int main(void)
+{
+    if (StartProcess())
+    {
+        MemoryLeaks();
+        return -1;
+    }
+    MemoryLeaks();
     return 0;
 }

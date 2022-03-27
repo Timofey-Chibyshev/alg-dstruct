@@ -314,3 +314,13 @@ void DeleteFixup(Node* x, Node** root)
     }
     x->color = BLACK;
 }
+
+void TreeDestroy(Node* x) 
+{
+    if (x != NIL) 
+    {
+        TreeDestroy(x->left);
+        TreeDestroy(x->right);
+        free(x);
+    }
+}
