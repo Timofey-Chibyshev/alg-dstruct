@@ -19,7 +19,7 @@ int StartProcess()
     char command, space;
     char buf[BUF_SIZE] = { 0 };
     int key;
-    while(fgets(buf, BUF_SIZE, stdin))
+    while (fgets(buf, BUF_SIZE, stdin))
     {
         if (sscanf(buf, "%c%c%d", &command, &space, &key) <= 0)
         {
