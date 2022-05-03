@@ -54,20 +54,20 @@ int Delete(Node** table, char* key)
     if (LookUp(table, key))
     {
         unsigned int index = Hash(key);
-        Node* it = table[index];
+        Node* cur = table[index];
         Node* prev = NULL;
-        while (strcmp(it->data, key))
+        while (strcmp(cur->data, key))
         {
-            prev = it;
-            it = it->next;
+            prev = cur;
+            cur = cur->next;
         }
         if (prev)
         {
-            prev->next = it->next;
+            prev->next = cur->next;
         }
         else
         {
-            table[index] = it->next;
+            table[index] = cur->next;
         }
     }
     return 0;
