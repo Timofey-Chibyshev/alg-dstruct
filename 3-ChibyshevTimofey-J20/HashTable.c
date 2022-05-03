@@ -3,7 +3,8 @@
 unsigned int Hash(const char* s)
 {
     unsigned int h = 0, g;
-    while (*s) {
+    while (*s) 
+    {
         h = (h << 4) + *s++;
         g = h & 0xf0000000L;
         if (g)
@@ -15,7 +16,7 @@ unsigned int Hash(const char* s)
     return h % TABLE_SIZE;
 }
 
-static int LookUp(Node** table, const char* key)
+int LookUp(Node** table, const char* key)
 {
     unsigned index = Hash(key);
     const Node* cur = table[index];
@@ -23,7 +24,14 @@ static int LookUp(Node** table, const char* key)
     {
         cur = cur->next;
     }
-    return cur != NULL;
+    if (cur)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 int Insert(Node** table, char* key)
