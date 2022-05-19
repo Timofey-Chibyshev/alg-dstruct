@@ -8,46 +8,37 @@ extern "C" {
 #pragma warning(disable:4996)
 
 #include <stdio.h>
-#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct Node {
-    struct Node* p;
-    int size;
-    int keys[3];
-    struct Node* sons[4];
-} Node;
+	typedef struct tree_t
+	{
+		struct tree_t* parent;
+		struct tree_t* son[3];
+		int height;
+		int key[2];
+		bool full;
+	} tree_t;
 
-Node* root = NULL;
+	tree_t* InitNode(tree_t* brother, int key, tree_t* pointer);
 
-typedef struct listNode {
-    struct listNode* next;
-    struct listNode* prev;
-    Node* val;
-} listNode;
+	tree_t* SearchNode(tree_t* root, int key);
+	
+	tree_t* SplitParent(tree_t* son, int key);
 
-typedef struct SplitRetval {
-    Node* left;
-    Node* right;
-} SplitRetval;
+	tree_t* Insert(tree_t* root, int key, tree_t* pointer);
 
-listNode* ListAdd(listNode* l, Node* v);
-Node* NodeCreate();
-Node* Search(Node* v, int x);
-void Print(Node* t, int n);
-int Cmpfu(const void* a, const void* b);
-void SortSons(Node* v);
-int SubTreeMax(Node* v);
-void UpdateKeys(Node* v);
-void SplitParent(Node* t);
-Node* Add(Node* t, int x);
-void DeleteInNode(Node* v);
-Node* FindBrother(Node* v);
-Node* Del(Node* v, int x);
-int GetHeight(Node* v);
-Node* Merge(Node* l, Node* r);
-SplitRetval Split(Node* t, int key);
+	bool FindNode(tree_t* tree, int key);
+
+	void DestroyTree(tree_t* root);
+
+	tree_t* Remove(tree_t* root, int key);
+
+	void PrintTree(tree_t* t, int offset);
+
+	tree_t* SplitTree(tree_t* tree, int key, tree_t** pLeft, tree_t** pRight);
+
+	tree_t* MergeTree(tree_t* left, tree_t* right);
 
 #ifdef __cplusplus
 }
